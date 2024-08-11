@@ -1,0 +1,57 @@
+volumes:
+  volume_database_bookworm:
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: project_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - volume_database_bookworm:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - app_bookworm
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: project_phpmyadmin
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "81:80"
+    networks:
+      - app_bookworm
+
+  web:
+    build: ./.docker
+    container_name: app_bookworm
+    volumes:
+      - ./:/var/www/html
+      - ./.docker/virtualhost.conf:/etc/apache2/sites-available/000-default.conf
+      - ./.docker/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - mysql
+    networks:
+      - app_bookworm
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: project_mailhog
+    ports:
+      - "1025:1025" # smtp server
+      - "8025:8025" # web ui
+    networks:
+      - app_bookworm
+
+networks:
+  app_bookworm:
