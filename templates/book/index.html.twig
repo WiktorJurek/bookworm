@@ -4,7 +4,20 @@
 
 {% block body %}
     <div class="container mt-4">
-        <h1>Book List</h1>
+        <div class="d-flex justify-content-between mb-4">
+            <h1>Book List</h1>
+
+            <div>
+                {% if app.user %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('admin') }}" class="btn btn-secondary">Admin Panel</a>
+                    {% endif %}
+                    <a href="{{ path('app_logout') }}" class="btn btn-danger">Logout</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-primary">Login</a>
+                {% endif %}
+            </div>
+        </div>
 
         {{ form_start(form, {'method': 'GET', 'attr': {'class': 'form-inline mb-4'}}) }}
 
@@ -31,7 +44,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ book.title }}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">by {{ book.author }}</h6>
-                            <p class="card-text">{{ book.description|slice(0, 100) ~ (book.description|length > 100 ? '...' : '') }}</p>
+                            <p class="card-text">{{ book.description|striptags|slice(0, 100) ~ (book.description|striptags|length > 100 ? '...' : '') }}</p>
                             <a href="{{ path('app_book_show', {'id': book.id}) }}" class="btn btn-secondary">View Details</a>
                         </div>
                     </div>

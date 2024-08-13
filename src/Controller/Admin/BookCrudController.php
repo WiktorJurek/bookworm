@@ -24,7 +24,7 @@ class BookCrudController extends AbstractCrudController
         return [
             TextField::new('title'),
             TextField::new('author'),
-            TextEditorField::new('description'),
+            TextEditorField::new('description')->setNumOfRows(20),
             IntegerField::new('year'),
             TextField::new('ISBN'),
             ImageField::new('cover')

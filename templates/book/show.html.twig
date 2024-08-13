@@ -24,7 +24,7 @@
                 <p class="lead"><strong>Autor:</strong> {{ book.author }}</p>
                 <p><strong>Data publikacji:</strong> {{ book.year }}</p>
                 <p><strong>Opis:</strong></p>
-                <p>{{ book.description }}</p>
+                <p>{{ book.description|striptags }}</p>
                 <a href="{{ path('app_book_list') }}" class="btn btn-primary">Powrót do listy książek</a>
             </div>
         </div>
