@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class BookController extends AbstractController
 {
-    #[Route('/book', name: 'app_book_list', methods: ['GET'])]
+    #[Route('/', name: 'app_book_list', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $entityManager, PaginatorInterface $paginator): Response
     {
         $form = $this->createForm(BookSearchType::class, null, [
